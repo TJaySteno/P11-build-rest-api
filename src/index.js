@@ -4,6 +4,8 @@
 const express = require('express');
 const morgan = require('morgan');
 
+const seed = require('./middleware/seed');
+
 const app = express();
 
 // set our port
@@ -16,14 +18,14 @@ app.use(morgan('dev'));
 app.use('/', express.static('public'));
 
 // catch 404 and forward to global error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   const err = new Error('File Not Found');
   err.status = 404;
   next(err);
 });
 
 // Express's global error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
@@ -32,6 +34,6 @@ app.use(function(err, req, res, next) {
 });
 
 // start listening on our port
-const server = app.listen(app.get('port'), function() {
+const server = app.listen(app.get('port'), () => {
   console.log('Express server is listening on port ' + server.address().port);
 });
