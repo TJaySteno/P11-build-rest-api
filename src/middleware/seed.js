@@ -21,8 +21,8 @@ const seedDB = async () => {
         seeder.populateModels(data, function() {
           console.log('Seeding complete');
 
-        }, err => { if (err) console.error('Error clearing models:', err) });
-      }, err => { if (err) console.error('Error clearing models:', err) });
+        }, err => { if (err) console.error('Model population error:', err) });
+      }, err => { if (err) console.error('Model clearing error:', err) });
     });
   } catch (err) { console.error('Console error:', err); }
 }
