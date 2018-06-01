@@ -1,7 +1,7 @@
 'use strict';
 
 const router = require('express').Router();
-const User = require('../models/user').User;
+const { User } = require('../models/user');
 
 // GET all users and display alphabetically
 router.get('/', async (req, res, next) => {
@@ -33,7 +33,7 @@ router.post('/', async (req, res, next) => {
         } else return res.json(err)
       }
       console.log('User saved!');
-      res.redirect('/api/users');
+      res.json(user);
     });
   } catch (err) {
     next(err);
