@@ -26,24 +26,28 @@ const UserSchema = new Schema({
   }
 });
 
-// This is used with User.authenticate(cred)
+// Check a user's credentials. If no errors found, save user's info to 'req'.
 UserSchema.statics.authenticate = (cred, req, next, err) => {
+
   // Find user based on email
   User.findOne({ emailAddress: cred.name })
     .exec((findErr, user) => {
       if (findErr) return next(findErr);
       if (!user) return next(err(404, 'Cannot find provided email address'));
 
-      // Compare passwords
+      // Compare passwords. On a match, store all user info besides the password.
       bcrypt.compare(cred.pass, user.password, (bcryptErr, match) => {
         if (bcryptErr) return next(bcryptErr);
         if (!match) return next(err(401, 'Invalid password'));
-        req.user = user;
+
+        const { _id, fullName, emailAddress, __v } = user;
+        req.user = { _id, fullName, emailAddress, __v };
         next();
       });
     });
 };
 
+// Pre-'save', hash a new user's password for security
 UserSchema.pre('save', function (next) {
   const salt = bcrypt.genSaltSync(10);
   this.password = bcrypt.hashSync(this.password, salt);
