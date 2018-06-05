@@ -10,20 +10,12 @@ const err = require('../middleware/err');
 
 // Use 'courseID' param to look up course
 router.param('courseID', (req, res, next, id) => {
-  Course.findById(id, async (findErr, course) => {
+  Course.findById(id, (findErr, course) => {
     if (findErr) return next(findErr);
     if (!course) return next(err(404, 'Course not found'));
 
-    const thisCourse = course;
-    thisCourse.user = await User.findById(course.user, '_id fullName', (err, user) => err ? next(err) : user);
-    Review.find()
-      .where('_id').in(course.reviews)
-      .exec((err, reviews) => {
-        if (err) return next(err);
-        thisCourse.reviews = reviews;
-        req.course = thisCourse;
-        next();
-      });
+    req.course = course;
+    next();
   });
 });
 
@@ -56,19 +48,17 @@ router.post('/', authenticate, (req, res, next) => {
 
 // GET /api/courses/:courseId 200
   // Returns all Course properties and related user and review documents for the provided course ID
-router.get('/:courseID', (req, res) => {
-
-
-
-  /*
-  EC:
-    for user and reviews.user props
-      only user id and fullName are returned
-
-  full text: Using deep population, only the user’s id and fullName are returned for the user and reviews.user properties on the GET /api/courses/:courseId route
-  */
-
-  res.json(req.course);
+router.get('/:courseID', async (req, res) => {
+  Course.findById(req.params.courseID)
+    .populate('user', '_id fullName')
+    .populate({
+      path: 'reviews',
+      populate: { path: 'user', select: '_id fullName' }
+    })
+    .exec((err, thing) => {
+      if (err) return next(err);
+      res.json(thing);
+    });
 });
 
 // PUT /api/courses/:courseId 204
@@ -89,11 +79,12 @@ router.post('/:courseID/reviews', authenticate, (req, res, next) => {
   const reviewTemplate = req.body;
   reviewTemplate.user = req.user._id;
   const review = new Review(reviewTemplate);
+  review.save(saveErr => saveErr ? next(saveErr) : null);
 
   Course.findById(req.course._id)
     .exec((findErr, course) => {
       course.reviews.push(review);
-      course.save(saveErr => saveErr ? next(saveErr) : null );
+      course.save(saveErr => saveErr ? next(saveErr) : null);
 
       res.status(201);
       res.location('/');

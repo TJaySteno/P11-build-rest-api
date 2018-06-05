@@ -7,10 +7,7 @@ const { Schema } = mongoose;
 
 // Create answer schema
 const UserSchema = new Schema({
-  fullName: {
-    type: String,
-    required: [true, 'User name is required']
-  },
+  fullName: { type: String, required: [true, 'User name is required'] },
   emailAddress: {
     type: String,
     required: [true, 'User email is required'],
@@ -20,10 +17,7 @@ const UserSchema = new Schema({
       message: '{VALUE} is not a valid email address!'
     }
   },
-  password: {
-    type: String,
-    required: [true, 'Password is required']
-  }
+  password: { type: String, required: [true, 'Password is required'] }
 });
 
 // Check a user's credentials. If no errors found, save user's info to 'req'.
