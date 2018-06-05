@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 
 // Create answer schema
 const CourseSchema = new Schema({
-  _user: {
+  user: {
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
@@ -32,12 +32,10 @@ const CourseSchema = new Schema({
       }
     }
   ],
-  reviews: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Review'
-    }
-  ]
+  reviews: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Review'
+  }]
 });
 
 const Course = mongoose.model('Course', CourseSchema);

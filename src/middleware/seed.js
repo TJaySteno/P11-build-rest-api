@@ -1,30 +1,31 @@
+const mongoose = require('mongoose');
 const seeder = require('mongoose-seed');
 const data = require('../data/data');
 
-const seedDB = async () => {
-  try {
-    seeder.connect('mongodb://localhost:27017/courseAPI', function () {
+const seedDB = () => {
+  seeder.connect('mongodb://localhost:27017/courseAPI', err => {
 
-      // Load Mongoose models
-      seeder.loadModels([
-        './src/models/user.js',
-        './src/models/review.js',
-        './src/models/course.js'
-      ]);
-      console.log('Models loaded');
+    // Load Mongoose models
+    seeder.loadModels([
+      './src/models/user.js',
+      './src/models/review.js',
+      './src/models/course.js'
+    ]);
 
-      // Clear specified collections
-      seeder.clearModels(['User', 'Course', 'Review'], function() {
-        console.log('Models cleared');
+    // Clear specified collections
+    seeder.clearModels(['User', 'Course', 'Review'], () => {
 
-        // Callback to populate DB once collections have been cleared
-        seeder.populateModels(data, function() {
-          console.log('Seeding complete');
+      // Callback to populate DB once collections have been cleared
+      seeder.populateModels(data, function() {
+        console.log('Models populated\nAPI ready...');
 
-        }, err => { if (err) console.error('Model population error:', err) });
-      }, err => { if (err) console.error('Model clearing error:', err) });
+      });
     });
-  } catch (err) { console.error('Console error:', err); }
+  });
+
+  const db = mongoose.connection;
+  db.on('error', err => console.error('Connection error:', err));
+  db.once('open', () => console.log('Connected to database'));
 }
 
 seedDB();

@@ -3,9 +3,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// Create answer schema
 const ReviewSchema = new Schema({
-  _user: {
+  user: {
     type: Schema.Types.ObjectId,
     ref: 'User'
   },

@@ -33,11 +33,11 @@ app.use((req, res, next) => {
 
 // Express's global error handler
 app.use((err, req, res, next) => {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+  res.status(err.status || 500)
+    .send({
+      message: err.message,
+      error: err
+    });
 });
 
 // start listening on our port
