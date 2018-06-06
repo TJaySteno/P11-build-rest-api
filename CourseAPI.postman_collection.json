@@ -213,7 +213,7 @@
 		{
 			"name": "Update Course (Minimum Data)",
 			"request": {
-				"url": "localhost:5000/api/courses/5702a1fdf18e6ebd1292282e",
+				"url": "localhost:5000/api/courses/57029ed4795118be119cc440",
 				"method": "PUT",
 				"header": [
 					{
@@ -229,7 +229,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"_id\": \"5702a1fdf18e6ebd1292282e\",\n    \"title\": \"New Course Updated Again Hello\",\n    \"description\": \"My course description. And again.\",\n    \"user\": {\n        \"_id\": \"57029ed4795118be119cc437\"\n    },\n    \"steps\": [\n        {\n            \"title\": \"Step 1\",\n            \"description\": \"My first step.\"\n        }\n    ]\n}\n"
+					"raw": "{\n    \"_id\": \"57029ed4795118be119cc440\",\n    \"title\": \"New Course Updated Again Hello\",\n    \"description\": \"My course description. And again.\",\n    \"user\": {\n        \"_id\": \"57029ed4795118be119cc437\"\n    },\n    \"steps\": [\n        {\n            \"title\": \"Step 1\",\n            \"description\": \"My first step.\"\n        }\n    ]\n}\n"
 				},
 				"description": ""
 			},

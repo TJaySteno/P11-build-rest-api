@@ -1,11 +1,11 @@
 'use strict';
 
-const router = require('express').Router();
+const router       = require('express').Router();
 
-const { User } = require('../models/user');
+const { User }     = require('../models/user');
 const authenticate = require('../middleware/authenticate');
-const respond = require('../middleware/respond');
-const error = require('../middleware/error');
+const respond      = require('../middleware/respond');
+const error        = require('../middleware/error');
 
 // GET /api/users 200
   // Returns the currently authenticated user

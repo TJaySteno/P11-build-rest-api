@@ -1,23 +1,21 @@
 'use strict';
 
 // Dependencies
-const express = require('express');
-const morgan = require('morgan');
-const chalk = require('chalk');
+const express      = require('express');
+const morgan       = require('morgan');
+const chalk        = require('chalk');
 
 // Local modules
-const seed = require('./middleware/seed');
-const error = require('./middleware/error');
-const userRoutes = require('./routes/users');
+const seed         = require('./middleware/seed');
+const error        = require('./middleware/error');
+const userRoutes   = require('./routes/users');
 const courseRoutes = require('./routes/courses');
 
 // Initialize Express
 const app = express();
-
-// Set our port
 app.set('port', process.env.PORT || 5000);
 
-// Essential middleware
+// Middleware
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

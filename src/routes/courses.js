@@ -1,13 +1,13 @@
 'use strict';
 
-const router = require('express').Router();
+const router       = require('express').Router();
 
-const { Course } = require('../models/course');
-const { User } = require('../models/user');
-const { Review } = require('../models/review');
+const { Course }   = require('../models/course');
+const { User }     = require('../models/user');
+const { Review }   = require('../models/review');
 const authenticate = require('../middleware/authenticate');
-const respond = require('../middleware/respond');
-const error = require('../middleware/error');
+const respond      = require('../middleware/respond');
+const error        = require('../middleware/error');
 
 // Use 'courseID' param to look up course
 router.param('courseID', (req, res, next, id) => {

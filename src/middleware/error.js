@@ -1,3 +1,5 @@
+'use strict';
+
 // Custom error constructor
   // Accepts status code, then either an error message or error object
 module.exports = (code, error) => {

@@ -1,21 +1,21 @@
 'use strict';
 
 // Dependencies
-const express = require('express');
+const express  = require('express');
 const mongoose = require('mongoose');
-const seeder = require('mongoose-seed');
-const request = require('supertest');
-const chalk = require('chalk');
+const seeder   = require('mongoose-seed');
+const request  = require('supertest');
+const chalk    = require('chalk');
 
 // Local modules
-const data = require('../data/data');
-const userRoutes = require('../routes/users');
+const data   = require('../data/data');
+const router = require('../routes/users');
 
 // Initialize app
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use('/api/users', userRoutes);
+app.use('/api/users', router);
 
 // Perform tests on requests to /api/users
 describe(chalk.yellow('Seeding database'), () => {

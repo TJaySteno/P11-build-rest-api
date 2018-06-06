@@ -1,8 +1,10 @@
-const mongoose = require('mongoose');
-const seeder = require('mongoose-seed');
-const chalk = require('chalk');
+'use strict';
 
-const data = require('../data/data');
+const mongoose = require('mongoose');
+const seeder   = require('mongoose-seed');
+const chalk    = require('chalk');
+
+const data     = require('../data/data');
 
 const seedDB = () => {
   console.log(chalk.yellow('  Seeding database'));
