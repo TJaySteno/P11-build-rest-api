@@ -236,9 +236,34 @@
 			"response": []
 		},
 		{
-			"name": "Create Review",
+			"name": "Create Review (Someone Else's Course)",
 			"request": {
 				"url": "http://localhost:5000/api/courses/57029ed4795118be119cc43d/reviews",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic am9lQHNtaXRoLmNvbTpwYXNzd29yZA==",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"rating\": 2\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create Review (Own Course)",
+			"request": {
+				"url": "http://localhost:5000/api/courses/57029ed4795118be119cc440/reviews",
 				"method": "POST",
 				"header": [
 					{
