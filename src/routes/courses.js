@@ -6,14 +6,14 @@ const { Course } = require('../models/course');
 const { User } = require('../models/user');
 const { Review } = require('../models/review');
 const authenticate = require('../middleware/authenticate');
-const err = require('../middleware/err');
+const respond = require('../middleware/respond');
+const error = require('../middleware/error');
 
 // Use 'courseID' param to look up course
 router.param('courseID', (req, res, next, id) => {
-  Course.findById(id, (findErr, course) => {
-    if (findErr) return next(findErr);
-    if (!course) return next(err(404, 'Course not found'));
-
+  Course.findById(id, (err, course) => {
+    if (err) return next(err);
+    if (!course) return next(error(404, 'Course not found'));
     req.course = course;
     next();
   });
@@ -22,27 +22,18 @@ router.param('courseID', (req, res, next, id) => {
 // GET /api/courses 200
   // Returns the '_id' and 'title' props for all courses, sorted alphabetically by title
 router.get('/', async (req, res, next) => {
-  try {
-    const courses = await Course.find({}, '_id title').sort({ title: 1 });
-    res.json(courses);
-  } catch (findErr) {
-    next(findErr);
-  }
+  Course.find({}, '_id title').sort({ title: 1 })
+    .then(courses => res.json(courses))
+    .catch(err => next(err));
 });
 
 // POST /api/courses 201
   // Creates a course, sets the Location header, and returns no content
 router.post('/', authenticate, (req, res, next) => {
   const course = new Course(req.body);
-  course.save(saveErr => {
-    if (saveErr) {
-      saveErr.status = 400;
-      return next(saveErr);
-    }
-
-    res.status(201);
-    res.location('/');
-    res.send();
+  course.save(err => {
+    if (err) return next(error(400, err));
+    res.send(respond(201, res, '/'));
   });
 });
 
@@ -55,41 +46,38 @@ router.get('/:courseID', async (req, res) => {
       path: 'reviews',
       populate: { path: 'user', select: '_id fullName' }
     })
-    .exec((err, thing) => {
-      if (err) return next(err);
-      res.json(thing);
-    });
+    .exec((err, course) => err ? next(err) : res.json(course));
 });
 
 // PUT /api/courses/:courseId 204
   // Updates a course and returns no content
 router.put('/:courseID', authenticate, (req, res, next) => {
   req.course.update(req.body).exec()
-    .then(() => {
-      // NOTE: should this be creating a new course?
-      res.status(204);
-      res.send();
-    })
-    .catch(updateErr => next(updateErr));
+    .then(() => res.send(respond(204, res)))
+    .catch(err => next(error(400, err)));
 });
 
 // POST /api/courses/:courseId/reviews 201
   // Creates a new review for a course, sets the Location header, and returns no content
 router.post('/:courseID/reviews', authenticate, (req, res, next) => {
-  const reviewTemplate = req.body;
-  reviewTemplate.user = req.user._id;
-  const review = new Review(reviewTemplate);
-  review.save(saveErr => saveErr ? next(saveErr) : null);
+  const reviewerID = req.user._id.toString()
+  const teacherID = req.course.user.toString();
+  if (reviewerID === teacherID) return next(error(401, 'Reviewing your own class is not allowed'));
 
-  Course.findById(req.course._id)
-    .exec((findErr, course) => {
-      course.reviews.push(review);
-      course.save(saveErr => saveErr ? next(saveErr) : null);
+  const newReview = req.body;
+  newReview.user = req.user._id;
+  const review = new Review(newReview);
 
-      res.status(201);
-      res.location('/');
-      res.send();
-    });
+  review.save(err => {
+    if (err) return next(error(400, err));
+
+    Course.findById(req.course._id)
+      .exec((err, course) => {
+        course.reviews.push(review._id);
+        course.save(err => { if (err) return next(error(400, err)) });
+        res.send(respond(201, res, '/'));
+      });
+  });
 });
 
 module.exports = router;

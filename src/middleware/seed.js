@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
 const seeder = require('mongoose-seed');
+const chalk = require('chalk');
+
 const data = require('../data/data');
 
 const seedDB = () => {
-  seeder.connect('mongodb://localhost:27017/courseAPI', err => {
+  console.log(chalk.yellow('  Seeding database'));
+  seeder.connect('mongodb://localhost:27017/courseAPI', () => {
 
     // Load Mongoose models
     seeder.loadModels([
@@ -14,18 +17,18 @@ const seedDB = () => {
 
     // Clear specified collections
     seeder.clearModels(['User', 'Course', 'Review'], () => {
+      console.log(chalk.yellow('  Models loaded and cleared'));
 
       // Callback to populate DB once collections have been cleared
-      seeder.populateModels(data, function() {
-        console.log('Models populated\nAPI ready...');
+      seeder.populateModels(data, () => {
+        console.log(chalk.green('  Database seeding complete'));
 
       });
     });
   });
 
   const db = mongoose.connection;
-  db.on('error', err => console.error('Connection error:', err));
-  db.once('open', () => console.log('Connected to database'));
+  db.once('open', () => console.log(chalk.yellow('  Connected to database')));
 }
 
 seedDB();
