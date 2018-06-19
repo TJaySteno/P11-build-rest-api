@@ -11,4 +11,12 @@ This project ended up being a bit of a struggle for me, but here on the other si
 
 ---
 
+__Grade:__ Exceeds Expectations
+
+__Grader's Overall Comments:__ "Great job! All throughout your code I found it easy to follow and read. Doesn't hurt if your project also ran smooth throughout, which it did. I strongly encourage you to go for exceeds on following projects. Awesome job on this one."
+
+---
+
+#### _Special Instructions for Setup_
+
 This project is easiest to use alongside Postman. I encourage you to download that program and use the provided Postman collection as a convenient jump-off point when evaluating this project.
