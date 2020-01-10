@@ -3,7 +3,7 @@
 const mongoose   = require('mongoose');
 const { Schema } = mongoose;
 
-// Create review schema
+/* Create review schema */
 const ReviewSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: 'User' },
   postedOn: { type: Date, default: Date.now() },
@@ -11,9 +11,9 @@ const ReviewSchema = new Schema({
     type: Number,
     required: [true, 'Rating of 1 to 5 is required'],
     min: [1, 'Rating cannot be below 1'],
-    max: [5, 'Rating cannot be above 5']
+    max: [5, 'Rating cannot be above 5'],
   },
-  review: String
+  review: String,
 });
 
 const Review = mongoose.model('Review', ReviewSchema);
