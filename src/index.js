@@ -6,7 +6,7 @@ const morgan       = require('morgan');
 const chalk        = require('chalk');
 
 /* Local modules */
-// const seed         = require('./middleware/seed');
+const seed         = require('./middleware/seed');
 const error        = require('./middleware/error');
 const userRoutes   = require('./routes/users');
 const courseRoutes = require('./routes/courses');
